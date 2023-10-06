@@ -1,4 +1,4 @@
-package com.example.batchwithoutweb.config.flowjob;
+package com.example.batchwithoutweb.config.flowstep;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -22,45 +22,49 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
-public class FlowArchitectureConfig {
+public class FlowStepConfig {
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
 
     @Bean
-    public Job v11BatchFlowJob(){
-        return new JobBuilder("v11FlowJob", jobRepository)
+    public Job v14BatchFlowJob(){
+        return new JobBuilder("v14FlowJob", jobRepository)
             .incrementer(new RunIdIncrementer())
-            .start(flow())
-            .next(v11Step3())
-            .end()
+            .start(v14FlowStep())
+            .next(v14Step2())
             .build();
     }
 
-    private Flow flow() {
-        FlowBuilder<Flow> v11Flow1 = new FlowBuilder<>("v11Flow1");
-        return v11Flow1.start(v11Step1())
-            .next(v11Step2())
+    private Step v14FlowStep() {
+        return new StepBuilder("v14FlowStep1", jobRepository)
+            .flow(v14Flow1())
+            .build();
+    }
+
+    private Flow v14Flow1() {
+        FlowBuilder<Flow> v14Flow1 = new FlowBuilder<>("v14Flow1");
+        return v14Flow1.start(v14Step1())
             .build();
     }
 
     @Bean
-    public Step v11Step1() {
-        return new StepBuilder("v11Step1", jobRepository)
+    public Step v14Step1() {
+        return new StepBuilder("v14Step1", jobRepository)
             .tasklet(new Tasklet() {
                 @Override
                 public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
                     String stepName = chunkContext.getStepContext().getStepName();
                     log.info("stepName : {} has been executed!", stepName);
-                    //throw new RuntimeException("step1 was failed");
-                    return RepeatStatus.FINISHED;
+                    throw new RuntimeException("step1 was failed");
+                    //return RepeatStatus.FINISHED;
                 }
             }, transactionManager)
             .build();
     }
 
     @Bean
-    public Step v11Step2() {
-        return new StepBuilder("v11Step2", jobRepository)
+    public Step v14Step2() {
+        return new StepBuilder("v14Step2", jobRepository)
             .tasklet(new Tasklet() {
                 @Override
                 public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
@@ -72,8 +76,8 @@ public class FlowArchitectureConfig {
             .build();
     }
 
-    private Step v11Step3() {
-        return new StepBuilder("v11Step3", jobRepository)
+    private Step v14Step3() {
+        return new StepBuilder("v14Step3", jobRepository)
             .tasklet(new Tasklet() {
                 @Override
                 public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {

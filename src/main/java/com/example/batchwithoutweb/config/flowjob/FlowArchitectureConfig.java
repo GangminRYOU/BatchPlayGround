@@ -3,7 +3,9 @@ package com.example.batchwithoutweb.config.flowjob;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.StepContribution;
+import org.springframework.batch.core.job.builder.FlowBuilder;
 import org.springframework.batch.core.job.builder.JobBuilder;
+import org.springframework.batch.core.job.flow.Flow;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.scope.context.ChunkContext;
@@ -20,25 +22,30 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
-public class FlowJobConfig {
+public class FlowArchitectureConfig {
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
 
     @Bean
-    public Job v6BatchFlowJob(){
-        return new JobBuilder("v6FlowJob", jobRepository)
+    public Job v11BatchFlowJob(){
+        return new JobBuilder("v11FlowJob", jobRepository)
             .incrementer(new RunIdIncrementer())
-            .start(v6Step1())
-            .on("COMPLETED").to(v6Step3())
-            .from(v6Step1())
-            .on("FAILED").to(v6Step2())
+            .start(flow())
+            .next(v11Step3())
             .end()
             .build();
     }
 
+    private Flow flow() {
+        FlowBuilder<Flow> v11Flow1 = new FlowBuilder<>("v11Flow1");
+        return v11Flow1.start(v11Step1())
+            .next(v11Step2())
+            .build();
+    }
+
     @Bean
-    public Step v6Step1() {
-        return new StepBuilder("v6Step1", jobRepository)
+    public Step v11Step1() {
+        return new StepBuilder("v11Step1", jobRepository)
             .tasklet(new Tasklet() {
                 @Override
                 public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
@@ -52,8 +59,8 @@ public class FlowJobConfig {
     }
 
     @Bean
-    public Step v6Step2() {
-        return new StepBuilder("v6Step2", jobRepository)
+    public Step v11Step2() {
+        return new StepBuilder("v11Step2", jobRepository)
             .tasklet(new Tasklet() {
                 @Override
                 public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
@@ -65,8 +72,8 @@ public class FlowJobConfig {
             .build();
     }
 
-    private Step v6Step3() {
-        return new StepBuilder("v6Step3", jobRepository)
+    private Step v11Step3() {
+        return new StepBuilder("v11Step3", jobRepository)
             .tasklet(new Tasklet() {
                 @Override
                 public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {

@@ -1,4 +1,4 @@
-package com.example.batchwithoutweb.config;
+package com.example.batchwithoutweb.config.jobadditional;
 
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Job;

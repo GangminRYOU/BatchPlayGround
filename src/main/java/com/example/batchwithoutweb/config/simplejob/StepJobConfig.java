@@ -1,4 +1,4 @@
-package com.example.batchwithoutweb.config;
+package com.example.batchwithoutweb.config.simplejob;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;

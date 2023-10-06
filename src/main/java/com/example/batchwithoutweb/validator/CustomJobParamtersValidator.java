@@ -1,4 +1,4 @@
-package com.example.batchwithoutweb.config;
+package com.example.batchwithoutweb.validator;
 
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersInvalidException;

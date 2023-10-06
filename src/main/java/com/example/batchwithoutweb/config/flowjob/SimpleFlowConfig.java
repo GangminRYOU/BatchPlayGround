@@ -22,30 +22,33 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
-public class FlowArchitectureConfig {
+public class SimpleFlowConfig {
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
 
     @Bean
-    public Job v11BatchFlowJob(){
-        return new JobBuilder("v11FlowJob", jobRepository)
+    public Job v13BatchFlowJob(){
+        return new JobBuilder("v13FlowJob", jobRepository)
             .incrementer(new RunIdIncrementer())
-            .start(flow())
-            .next(v11Step3())
+            .start(v13Step1())
+            .on("COMPLETED").to(v13Step2())
+            .from(v13Step1())
+            .on("FAILED").to(v13Flow1())
             .end()
             .build();
     }
 
-    private Flow flow() {
+    private Flow v13Flow1() {
         FlowBuilder<Flow> v11Flow1 = new FlowBuilder<>("v11Flow1");
-        return v11Flow1.start(v11Step1())
-            .next(v11Step2())
+        return v11Flow1.start(v13Step2())
+            .on("*")
+            .to(v13Step3())
             .build();
     }
 
     @Bean
-    public Step v11Step1() {
-        return new StepBuilder("v11Step1", jobRepository)
+    public Step v13Step1() {
+        return new StepBuilder("v13Step1", jobRepository)
             .tasklet(new Tasklet() {
                 @Override
                 public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
@@ -59,8 +62,8 @@ public class FlowArchitectureConfig {
     }
 
     @Bean
-    public Step v11Step2() {
-        return new StepBuilder("v11Step2", jobRepository)
+    public Step v13Step2() {
+        return new StepBuilder("v13Step2", jobRepository)
             .tasklet(new Tasklet() {
                 @Override
                 public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
@@ -72,8 +75,8 @@ public class FlowArchitectureConfig {
             .build();
     }
 
-    private Step v11Step3() {
-        return new StepBuilder("v11Step3", jobRepository)
+    private Step v13Step3() {
+        return new StepBuilder("v13Step3", jobRepository)
             .tasklet(new Tasklet() {
                 @Override
                 public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
