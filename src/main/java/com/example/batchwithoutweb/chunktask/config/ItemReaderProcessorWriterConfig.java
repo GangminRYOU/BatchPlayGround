@@ -73,7 +73,7 @@ public class ItemReaderProcessorWriterConfig {
 
     @Bean
     public ItemReader v5ChunkItemReader(){
-        return new CustomItemReader(Arrays.asList(new Customer("user1"), new Customer("user2"), new Customer("user3")));
+        return new CustomItemReader(Arrays.asList(new Customer("user1", 1, "1010"), new Customer("user2", 2, "1011"), new Customer("user3", 1, "1022")));
     }
 
     @Bean
