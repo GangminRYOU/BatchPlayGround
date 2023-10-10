@@ -23,6 +23,10 @@ dependencies {
     runtimeOnly 'mysql:mysql-connector-java:8.0.33'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+
+    //XML Marshaller
+    implementation 'org.springframework:spring-oxm:6.0.12'
+    implementation 'com.thoughtworks.xstream:xstream:1.4.20'
 }
 
 tasks.named('test') {
