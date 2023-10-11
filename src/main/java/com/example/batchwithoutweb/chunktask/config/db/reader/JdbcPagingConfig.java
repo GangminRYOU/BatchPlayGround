@@ -1,4 +1,4 @@
-package com.example.batchwithoutweb.chunktask.config.db;
+package com.example.batchwithoutweb.chunktask.config.db.reader;
 
 import java.util.HashMap;
 import java.util.Map;
