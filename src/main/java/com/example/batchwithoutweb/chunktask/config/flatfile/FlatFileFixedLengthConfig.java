@@ -1,4 +1,4 @@
-package com.example.batchwithoutweb.chunktask.config;
+package com.example.batchwithoutweb.chunktask.config.flatfile;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
