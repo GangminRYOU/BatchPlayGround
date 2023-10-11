@@ -1,4 +1,4 @@
-package com.example.batchwithoutweb.chunktask.config.flatfile;
+package com.example.batchwithoutweb.chunktask.config.flatfile.reader;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
