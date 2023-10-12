@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.example.batchwithoutweb.chunktask.domain.Customer;
+import com.example.batchwithoutweb.chunktask.processor.CustomItemProcessorV2;
 import com.example.batchwithoutweb.chunktask.reader.CustomItemReader;
 
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,6 @@ import lombok.extern.slf4j.Slf4j;
 public class ItemReaderProcessorWriterConfig {
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
-    private final ItemProcessor itemProcessor;
     private final ItemWriter itemWriter;
 
     @Bean
@@ -66,9 +66,14 @@ public class ItemReaderProcessorWriterConfig {
         return new StepBuilder("v5ChunkStep2", jobRepository)
             .<Customer, Customer>chunk(3, transactionManager)
             .reader(v5ChunkItemReader())
-            .processor(itemProcessor)
+            .processor(itemProcessor())
             .writer(itemWriter)
             .build();
+    }
+
+    @Bean
+    public ItemProcessor itemProcessor() {
+        return new CustomItemProcessorV2();
     }
 
     @Bean

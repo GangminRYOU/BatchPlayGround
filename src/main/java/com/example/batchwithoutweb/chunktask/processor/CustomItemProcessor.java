@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 
 import com.example.batchwithoutweb.chunktask.domain.Customer;
 
-@Component
 public class CustomItemProcessor implements ItemProcessor<Customer, Customer> {
 
     @Override

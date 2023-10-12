@@ -8,4 +8,12 @@ public class JdbcCustomerV3 {
     private String firstName;
     private String lastName;
     private String birthDate;
+
+    public JpaCustomerV3 toEntity(){
+        return JpaCustomerV3.builder()
+            .firstName(firstName)
+            .lastName(lastName)
+            .birthDate(birthDate)
+            .build();
+    }
 }
